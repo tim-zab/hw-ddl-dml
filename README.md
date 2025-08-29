@@ -1,117 +1,112 @@
-# Домашнее задание к занятию "`Название занятия`" - `Фамилия и имя студента`
-
-
-### Инструкция по выполнению домашнего задания
-
-   1. Сделайте `fork` данного репозитория к себе в Github и переименуйте его по названию или номеру занятия, например, https://github.com/имя-вашего-репозитория/git-hw или  https://github.com/имя-вашего-репозитория/7-1-ansible-hw).
-   2. Выполните клонирование данного репозитория к себе на ПК с помощью команды `git clone`.
-   3. Выполните домашнее задание и заполните у себя локально этот файл README.md:
-      - впишите вверху название занятия и вашу фамилию и имя
-      - в каждом задании добавьте решение в требуемом виде (текст/код/скриншоты/ссылка)
-      - для корректного добавления скриншотов воспользуйтесь [инструкцией "Как вставить скриншот в шаблон с решением](https://github.com/netology-code/sys-pattern-homework/blob/main/screen-instruction.md)
-      - при оформлении используйте возможности языка разметки md (коротко об этом можно посмотреть в [инструкции  по MarkDown](https://github.com/netology-code/sys-pattern-homework/blob/main/md-instruction.md))
-   4. После завершения работы над домашним заданием сделайте коммит (`git commit -m "comment"`) и отправьте его на Github (`git push origin`);
-   5. Для проверки домашнего задания преподавателем в личном кабинете прикрепите и отправьте ссылку на решение в виде md-файла в вашем Github.
-   6. Любые вопросы по выполнению заданий спрашивайте в чате учебной группы и/или в разделе “Вопросы по заданию” в личном кабинете.
-   
-Желаем успехов в выполнении домашнего задания!
-   
-### Дополнительные материалы, которые могут быть полезны для выполнения задания
-
-1. [Руководство по оформлению Markdown файлов](https://gist.github.com/Jekins/2bf2d0638163f1294637#Code)
-
----
+# Домашнее задание к занятию «Работа с данными (DDL/DML)» - `Рыбенцов Геннадий`
 
 ### Задание 1
 
-`Приведите ответ в свободной форме........`
+## Простыня запросов 
 
-1. `Заполните здесь этапы выполнения, если требуется ....`
-2. `Заполните здесь этапы выполнения, если требуется ....`
-3. `Заполните здесь этапы выполнения, если требуется ....`
-4. `Заполните здесь этапы выполнения, если требуется ....`
-5. `Заполните здесь этапы выполнения, если требуется ....`
-6. 
+1.2. Создайте учётную запись sys_temp: 
 
-```
-Поле для вставки кода...
-....
-....
-....
-....
-```
+CREATE USER 'sys_temp'@'localhost' IDENTIFIED BY '***';
 
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота 1](ссылка на скриншот 1)`
+1.3. Выполните запрос на получение списка пользователей в базе данных: 
 
+SELECT user, host FROM mysql.user;
 
----
+1.4. Дайте все права для пользователя sys_temp: 
+
+GRANT ALL PRIVILEGES ON *.* TO 'sys_temp'@'localhost' WITH GRANT OPTION; 
+
+1.5. Выполните запрос на получение списка прав для пользователя sys_temp: 
+
+SHOW GRANTS FOR 'sys_temp'@'localhost'; 
+
+1.6. Переподключитесь к базе данных от имени sys_temp.
+     Для смены типа аутентификации с sha2 используйте запрос: 
+     ALTER USER 'sys_test'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password'; 
+
+Вместо этого для новой версии MySQL, где используется plugin caching_sha2_password: 
+     ALTER USER 'sys_temp'@'localhost' IDENTIFIED WITH caching_sha2_password BY 'systemp';
+
+Создание БД, куда будет восстановлен дамп: 
+
+mysql -h 127.0.0.1 -P 3306 -u sys_temp -p
+
+password
+
+CREATE DATABASE sakila;
+
+EXIT;
+
+1.7. Восстановите дамп в базу данных. 
+
+mysql -h 127.0.0.1 -P 3306 -u sys_temp -p sakila < C:\Users\Asus\Desktop\Netology\sakila-db\sakila-schema.sql
+
+password
+
+mysql -h 127.0.0.1 -P 3306 -u sys_temp -p sakila < C:\Users\Asus\Desktop\Netology\sakila-db\sakila-data.sql
+
+password
+
+1.8. При работе в IDE сформируйте ER-диаграмму получившейся базы данных. 
+При работе в командной строке используйте команду для получения всех таблиц базы данных. (скриншот)
+
+mysql -h 127.0.0.1 -P 3306 -u sys_temp -p 
+
+password 
+
+mysql> USE sakila;
+
+mysql> SHOW TABLES;
+
+<b>Скриншот диаграммы из dbeaver прилагаю. 
+
+1. Создание учетной записи sys_temp, выдача всех прав для пользователя sys_temp: 
+https://github.com/netology-code/sys-pattern-homework/blob/main/img/grant_all_privileges_to_sys_temp.png
+
+2. Получение списка пользователей в базе данных: 
+https://github.com/netology-code/sys-pattern-homework/blob/main/img/select_all_users.png
+
+3. Запрос на получение списка прав для пользователя sys_temp: 
+https://github.com/netology-code/sys-pattern-homework/blob/main/img/show_grants_for_sys_temp.png 
+
+4. Переподключение к базе данных от имени sys_temp.
+Для смены типа аутентификации с sha2 вместо - ALTER USER 'sys_test'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password'; я использовал: 
+ALTER USER 'sys_temp'@'localhost' IDENTIFIED WITH caching_sha2_password BY 'systemp'; для новой версии MySQL, где используется plugin caching_sha2_password. 
+
+https://github.com/netology-code/sys-pattern-homework/blob/main/img/connect_to_db_as_sys_temp.png
+
+5. Восстановление дампа в базу данных.
+https://github.com/netology-code/sys-pattern-homework/blob/main/img/create_db_sakila.png
+и 
+https://github.com/netology-code/sys-pattern-homework/blob/main/img/recover_sakila_from_dump.png
+
+6. ER-диаграмму получившейся базы данных: 
+https://github.com/netology-code/sys-pattern-homework/blob/main/img/sakila_diagram.png
+
+В командной строке использована команда для получения всех таблиц базы данных: 
+https://github.com/netology-code/sys-pattern-homework/blob/main/img/show_all_tables.png
+
 
 ### Задание 2
 
-`Приведите ответ в свободной форме........`
+Составьте таблицу, используя любой текстовый редактор или Excel, в которой должно быть два столбца: в первом должны быть названия таблиц восстановленной базы, во втором названия первичных ключей этих таблиц.
 
-1. `Заполните здесь этапы выполнения, если требуется ....`
-2. `Заполните здесь этапы выполнения, если требуется ....`
-3. `Заполните здесь этапы выполнения, если требуется ....`
-4. `Заполните здесь этапы выполнения, если требуется ....`
-5. `Заполните здесь этапы выполнения, если требуется ....`
-6. 
+Для этого в dbeaver (для удобства) сделал запрос: 
 
-```
-Поле для вставки кода...
-....
-....
-....
-....
-```
+SELECT
+        TABLE_NAME,
+        COLUMN_NAME
+    FROM
+        INFORMATION_SCHEMA.COLUMNS
+    WHERE
+        TABLE_SCHEMA = 'sakila'
+    AND
+        COLUMN_KEY = 'PRI';
 
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота 2](ссылка на скриншот 2)`
+https://github.com/netology-code/sys-pattern-homework/blob/main/img/select_tables_names_and_pk.png 
 
+Или в cmd:
 
----
+select TABLE_NAME, COLUMN_NAME from INFORMATION_SCHEMA.columns where TABLE_SCHEMA = 'sakila' and COLUMN_KEY = 'PRI';
 
-### Задание 3
-
-`Приведите ответ в свободной форме........`
-
-1. `Заполните здесь этапы выполнения, если требуется ....`
-2. `Заполните здесь этапы выполнения, если требуется ....`
-3. `Заполните здесь этапы выполнения, если требуется ....`
-4. `Заполните здесь этапы выполнения, если требуется ....`
-5. `Заполните здесь этапы выполнения, если требуется ....`
-6. 
-
-```
-Поле для вставки кода...
-....
-....
-....
-....
-```
-
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота](ссылка на скриншот)`
-
-### Задание 4
-
-`Приведите ответ в свободной форме........`
-
-1. `Заполните здесь этапы выполнения, если требуется ....`
-2. `Заполните здесь этапы выполнения, если требуется ....`
-3. `Заполните здесь этапы выполнения, если требуется ....`
-4. `Заполните здесь этапы выполнения, если требуется ....`
-5. `Заполните здесь этапы выполнения, если требуется ....`
-6. 
-
-```
-Поле для вставки кода...
-....
-....
-....
-....
-```
-
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота](ссылка на скриншот)`
+https://github.com/netology-code/sys-pattern-homework/blob/main/img/select_tables_names_and_pk_cmd.png 
